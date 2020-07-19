@@ -1,0 +1,35 @@
+# main files to serve
+index index.php index.html;
+
+location / {
+
+    allow all;
+
+    # First attempt to serve request as file, then
+    # as directory, then fall back to displaying a 404.
+    #try_files $uri $uri/ =404;
+    try_files $uri $uri/ /index.php?$query_string;
+
+    # Set CSP Rules
+    # https://content-security-policy.com/
+    # ajusta o conjunto de domínios permitidos para carregamento de scripts externos
+    # aplica os métodos aceitos para aplicar estilos e executar scripts no site
+    # add_header Content-Security-Policy default-src 'self' data: 'unsafe-inline' 'unsafe-eval' *.googleapis.com *.gstatic.com *google-analytics.com
+
+}
+
+# pass PHP scripts to FastCGI server
+
+${PHP_INCLUDE}
+
+# deny access to .htaccess files, if Apache's document root
+# concurs with nginx's one
+
+location ~ /\.ht {
+    deny all;
+}
+
+# disallow the access to all files and folders with dot at the beginning
+location ~ /\.(?!well-known\/) {
+    deny all;
+}

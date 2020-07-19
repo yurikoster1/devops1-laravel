@@ -1,0 +1,8 @@
+#@version 3.7.5
+
+FROM yurikoster1/laravel_base as laravel_publish
+
+COPY ./www /var/www/html
+
+
+

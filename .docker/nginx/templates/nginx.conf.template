@@ -1,0 +1,17 @@
+# @author Marcos Freitas
+# @author Yuri Koster
+# @version 2.0.0 - Based on Infrastructure Manual Document - Nginx + PHP 7.x
+#
+# @changelog
+# 2.1.0 - Changed files to accept ENVIROMENT keys to use in templates
+# 2.0.0 - Added initial inbound proxy configurations to NGINX act as a proxy server too and separated http server directives into a snippet
+# 1.1.0 - Added snippet instructions to do custom redirect.
+#
+# @info some @features are disabled but can be used normaly
+# @experimental things should not be enabled at production servers yet
+# @todo have pendent tasks
+
+# the following configuration snippet implements a 1‑second caching period for responses with a 200 OK status code.
+fastcgi_cache_path /tmp/cache keys_zone=APPLICATION:10m levels=1:2 inactive=60m max_size=500m use_temp_path=off;
+
+include conf.d/snippets/http-server.conf;

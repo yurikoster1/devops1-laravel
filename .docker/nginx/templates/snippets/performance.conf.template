@@ -1,0 +1,74 @@
+# Start: Size Limits and Buffer Overflows
+client_body_buffer_size  2K;
+client_header_buffer_size 2k;
+
+# -- control for posts/upload
+# should be equal to fastcgi param
+client_max_body_size 80M;
+
+large_client_header_buffers 4 16k;
+
+# Start: Timeouts
+# allow the server to close connection on non responding client, this will free up memory
+reset_timedout_connection on;
+
+client_body_timeout   10;
+client_header_timeout 10;
+keepalive_timeout     0;
+send_timeout          2;
+fastcgi_read_timeout 60;
+
+# Gzip Compression
+# disabled because use of ssl
+gzip             on;
+gzip_comp_level  2;
+gzip_min_length  1000;
+gzip_proxied     expired no-cache no-store private auth;
+# gzip_vary on;
+# gzip_proxied any;
+# gzip_comp_level 6;
+# gzip_buffers 16 8k;
+# gzip_http_version 1.1;
+gzip_types text/plain text/xml text/css application/json application/javascript application/xml application/xml+rss;
+
+
+# Static file caching
+location ~* .(js|json)$ {
+    # Indicate that the resource may be cached by public caches like web caches for instance,
+    # if set to 'private' the resource may only be cached by client's browser.
+    add_header Cache-Control public;
+    # Indicate that the resource can be cached for 24 hours
+    expires 24h;
+}
+
+location ~* .(css)$ {
+    add_header Cache-Control public;
+    # Equivalent to above:
+    # Indicate that the resource can be cached for 86400 seconds (24 hours)
+    expires 86400;
+
+    # Add an ETag header with an identifier that can be stored by the client
+    etag on;
+}
+
+location ~* \.(?:ico|gif|jpe?g|png|svg|woff|woff22|ttf)$  {
+    add_header Cache-Control public;
+    expires 30d;
+    # Indicate that the browser can serve a compressed version of these resources
+    add_header Vary Accept-Encoding;
+    # Indicate that the resource must be revalidated at each access
+    add_header Cache-Control must-revalidate;
+    access_log off;
+    etag on;
+    # Set the OS file cache.
+    open_file_cache max=3000 inactive=120s;
+    open_file_cache_valid 60s;
+    open_file_cache_min_uses 2;
+    open_file_cache_errors off;
+}
+
+# medium downloadable files that can be sent directly without be copied to buffer
+location ~* .(mp3|mp4|pdf)$ {
+    sendfile on;
+    sendfile_max_chunk 80m;
+}

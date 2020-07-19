@@ -1,0 +1,24 @@
+# @info default http:80 server
+
+server {
+	listen ${NGINX_PORT} default_server;
+	listen [::]:${NGINX_PORT} default_server;
+
+	root ${NGINX_ROOT};
+
+	server_name ${NGINX_HOST};
+
+	# to SSL permanent redirect for all request on port 80
+	#server_name _;
+	#return 301 https://$host$request_uri;
+
+	# load general security configurations
+	include conf.d/snippets/security-locations.conf;
+
+    # Performance configuration
+	include conf.d/snippets/cache-directives.conf;
+	include conf.d/snippets/performance.conf;
+
+	# base configurations of virtual host
+	include conf.d/snippets/base-vhosts.conf;
+}

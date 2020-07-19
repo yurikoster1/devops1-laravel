@@ -1,0 +1,31 @@
+# @info part of server block
+# @todo change the name of this file
+
+# Disable show nginx version
+server_tokens off;
+
+# removing php header
+fastcgi_hide_header X-Powered-By;
+
+# Avoid clickjacking
+add_header X-Frame-Options SAMEORIGIN;
+
+# Disable content-type sniffing on some browsers
+add_header X-Content-Type-Options nosniff;
+
+# Enable the Cross-site scripting (XSS) filter
+add_header X-XSS-Protection "1; mode=block";
+
+# Disable directory listing
+autoindex off;
+
+# Set cookies secure
+#set_cookie_flag HttpOnly secure;
+
+# Enable CORS
+add_header Access-Control-Allow-Origin '*';
+
+# By removing the ETag header, you disable caches and browsers from being able to validate files,
+# so they are forced to rely on your Cache-Control and Expires header.
+# Basically you can remove If-Modified-Since and If-None-Match requests and their 304 Not Modified Responses.
+etag off;
