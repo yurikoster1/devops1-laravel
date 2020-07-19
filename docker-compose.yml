@@ -10,6 +10,7 @@ services:
     image: yurikoster1/laravel_base
     depends_on:
       - "devops_1_app-database"
+      - "devops_1_app-redis"
     networks:
       - devops_1_app-network
     restart: unless-stopped
