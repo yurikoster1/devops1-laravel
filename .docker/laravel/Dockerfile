@@ -1,6 +1,6 @@
 #@version 3.7.5
 
-FROM php:7.4.8-fpm-alpine3.12 AS base
+FROM php:7.4.8-fpm-alpine3.12
 MAINTAINER Yuri Koster <yurikoster1@gmail.com>
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
