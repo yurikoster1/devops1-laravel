@@ -6,7 +6,6 @@ services:
     build:
       context: .docker/laravel
       dockerfile: Dockerfile
-      target: base
     image: yurikoster1/laravel_base
     depends_on:
       - "devops_1_app-database"
