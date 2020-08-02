@@ -101,7 +101,7 @@ networks:
     labels:
      yuri.project.name: ${COMPOSE_PROJECT_NAME}
 
-volumes:
+#volumes:
 #  devops_1_dbdata:
 #    driver: local
 #    driver_opts:
