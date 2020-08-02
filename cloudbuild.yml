@@ -14,8 +14,24 @@ steps:
   - id: "Running Dokcer logs on laravel_app"
     name: 'gcr.io/cloud-builders/docker'
     args: ["logs", "laravel_app"]
-    
+
   - id: "Chown in /var/www"
     name: 'gcr.io/cloud-builders/docker'
     args: ['exec','-u','root','-t','laravel_app','chown','-R','www-data:www-data','/var/www']
+
+  - id: "Runnig Composer"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['exec','-t','laravel_app','composer','install']
+
+  - id: "Copying .env"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['exec','-t','laravel_app','cp','.env.example', '.env']
+
+  - id: "Generating key"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['exec','-t','laravel_app','php','/var/www/html/artisan', 'key:generate']
+
+  - id: "Migrating"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['exec','-t','laravel_app','php','/var/www/html/artisan', 'migrate']
 
