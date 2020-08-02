@@ -1,0 +1,112 @@
+version: "3.7"
+services:
+
+  #PHP
+  devops_1_app:
+    build:
+      context: .docker/laravel
+      dockerfile: Dockerfile
+    image: yurikoster1/laravel_base
+    depends_on:
+      - "devops_1_app-database"
+      - "devops_1_app-redis"
+    networks:
+      - devops_1_app-network
+    restart: unless-stopped
+    container_name: laravel_app
+    tty: true
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./www:/var/www/html
+    environment:
+      - DB_PASSWORD=${MYSQL_DOCKER_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+    labels:
+      yuri.project.name: ${COMPOSE_PROJECT_NAME}
+
+  #NIGNX
+  devops_1_nginx:
+    build:
+      context: .docker/nginx
+      dockerfile: Dockerfile
+    networks:
+      - devops_1_app-network
+    restart: unless-stopped
+    container_name: laravel_nginx
+    tty: true
+    ports:
+      - "8000:80"
+    depends_on:
+      - "devops_1_app"
+    volumes:
+      - ./www:/var/www/html
+      - ./.docker/nginx/templates:/etc/nginx/templates
+    environment:
+    - NGINX_ROOT=${NGINX_ROOT}
+    - NGINX_HOST=${NGINX_HOST}
+    - NGINX_PORT=${NGINX_PORT}
+    - PHP_SERVICE_NAME=${PHP_SERVICE_NAME}
+    - PHP_SERVICE_PORT=${PHP_SERVICE_PORT}
+    labels:
+      yuri.project.name: ${COMPOSE_PROJECT_NAME}
+
+
+
+  # Banco de Dados
+  devops_1_app-database:
+    #image: mysql:latest
+    build:
+      context: .docker/mysql
+      dockerfile: Dockerfile
+    user: "1000:1000"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: ${MYSQL_DOCKER_PASSWORD}
+    networks:
+      - devops_1_app-network
+    restart: unless-stopped
+    container_name: laravel_mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - devops_1_dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+    labels:
+      yuri.project.name: ${COMPOSE_PROJECT_NAME}
+
+  #REDIS
+  devops_1_app-redis:
+    image: redis:alpine
+    networks:
+      - devops_1_app-network
+    restart: unless-stopped
+    container_name: laravel_redis
+    tty: true
+    expose:
+      - 6379
+    labels:
+      yuri.project.name: ${COMPOSE_PROJECT_NAME}
+
+networks:
+  devops_1_app-network:
+    driver: bridge
+    labels:
+     yuri.project.name: ${COMPOSE_PROJECT_NAME}
+
+volumes:
+  devops_1_dbdata:
+    driver: local
+    driver_opts:
+        type: none
+        o: bind
+        device: "${PWD}/.docker/mysql/data"
+    labels:
+      yuri.project.name: ${COMPOSE_PROJECT_NAME}
