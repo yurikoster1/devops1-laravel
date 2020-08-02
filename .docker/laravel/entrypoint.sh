@@ -1,6 +1,8 @@
 #!/bin/sh
 
 echo "-- Running entrypoint";
+echo "-- Running ls";
+ls -la /var/www/html;
 
 CONTAINER_ALREADY_STARTED="CONTAINER_ALREADY_RAN_ONCE"
 

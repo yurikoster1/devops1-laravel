@@ -6,7 +6,8 @@ services:
     build:
       context: .
       dockerfile: .docker/laravel/Dockerfile
-      target: develop
+      target: base
+    entrypoint: 'php-fpm'
     image: yurikoster1/laravel_base
     depends_on:
       - "devops_1_app-database"
@@ -62,8 +63,8 @@ services:
     build:
       context: .docker/mysql
       dockerfile: Dockerfile
-    user: "1000:1000"
-    command: --default-authentication-plugin=mysql_native_password
+#    user: "1000:1000"
+    command: --default-authentication-plugin=mysql_native_password --innodb-use-native-aio=0
     environment:
       MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -76,7 +77,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - devops_1_dbdata:/var/lib/mysql
+      - ./.docker/mysql/data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
@@ -101,13 +102,3 @@ networks:
     driver: bridge
     labels:
      yuri.project.name: ${COMPOSE_PROJECT_NAME}
-
-volumes:
-  devops_1_dbdata:
-    driver: local
-    driver_opts:
-        type: none
-        o: bind
-        device: "${PWD}/.docker/mysql/data"
-    labels:
-      yuri.project.name: ${COMPOSE_PROJECT_NAME}
