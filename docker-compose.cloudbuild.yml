@@ -108,5 +108,5 @@ volumes:
 #        type: none
 #        o: bind
 #        device: "${PWD}/.docker/mysql/data"
-    labels:
-      yuri.project.name: ${COMPOSE_PROJECT_NAME}
+#    labels:
+#      yuri.project.name: ${COMPOSE_PROJECT_NAME}
