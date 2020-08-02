@@ -74,8 +74,8 @@ services:
     container_name: laravel_mysql
     ports:
       - "3306:3306"
-    volumes:
-      - devops_1_dbdata:/var/lib/mysql
+#    volumes:
+#      - devops_1_dbdata:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
@@ -102,11 +102,11 @@ networks:
      yuri.project.name: ${COMPOSE_PROJECT_NAME}
 
 volumes:
-  devops_1_dbdata:
-    driver: local
-    driver_opts:
-        type: none
-        o: bind
-        device: "${PWD}/.docker/mysql/data"
+#  devops_1_dbdata:
+#    driver: local
+#    driver_opts:
+#        type: none
+#        o: bind
+#        device: "${PWD}/.docker/mysql/data"
     labels:
       yuri.project.name: ${COMPOSE_PROJECT_NAME}
