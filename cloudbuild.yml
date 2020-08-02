@@ -6,14 +6,6 @@ steps:
       - 'docker-compose.cloudbuild.yml'
       - 'up'
       - '-d'
-  - id: "Running Docker ps"
-    name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'ps'
-
-  - id: "Running Dokcer logs on laravel_app"
-    name: 'gcr.io/cloud-builders/docker'
-    args: ["logs", "laravel_mysql"]
 
   - id: "Chown in /var/www"
     name: 'gcr.io/cloud-builders/docker'
@@ -38,4 +30,3 @@ steps:
   - id: "Running phpunit"
     name: 'gcr.io/cloud-builders/docker'
     args: ['exec','-t','laravel_app','php','/var/www/html/vendor/bin/phpunit', '-c', '/var/www/html/phpunit.xml']
-
