@@ -77,7 +77,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - devops_1_dbdata:/var/lib/mysql
+      - ./.docker/mysql/data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
@@ -102,13 +102,3 @@ networks:
     driver: bridge
     labels:
      yuri.project.name: ${COMPOSE_PROJECT_NAME}
-
-volumes:
-  devops_1_dbdata:
-    driver: local
-#    driver_opts:
-#        type: none
-#        o: bind
-#        device: "${PWD}/.docker/mysql/data"
-    labels:
-      yuri.project.name: ${COMPOSE_PROJECT_NAME}
