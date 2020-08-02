@@ -6,7 +6,16 @@ steps:
       - 'docker-compose.cloudbuild.yml'
       - 'up'
       - '-d'
-  - id: "Running Dokcer ps"
+  - id: "Running Docker ps"
     name: 'gcr.io/cloud-builders/docker'
     args:
       - 'ps'
+
+  - id: "Running Dokcer logs on laravel_app"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ["logs", "laravel_app"]
+    
+  - id: "Chown in /var/www"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['exec','-u','root','-t','laravel_app','chown','-R','www-data:www-data','/var/www']
+
