@@ -27,6 +27,6 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     args: ['exec','-t','laravel_app','php','/var/www/html/artisan', 'migrate']
 
-  - id: "Running phpunit"
+  - id: "Running Phpunit"
     name: 'gcr.io/cloud-builders/docker'
     args: ['exec','-t','laravel_app','php','/var/www/html/vendor/bin/phpunit', '-c', '/var/www/html/phpunit.xml']
