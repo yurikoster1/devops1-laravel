@@ -37,5 +37,5 @@ steps:
 
   - id: "Running phpunit"
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec','-t','laravel_app','php','/var/www/vendor/bin/phpuint', '-c', '/var/www/html/phpunit.xml']
+    args: ['exec','-t','laravel_app','php','/var/www/html/vendor/bin/phpunit', '-c', '/var/www/html/phpunit.xml']
 
