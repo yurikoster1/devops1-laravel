@@ -1,7 +1,7 @@
 # devops1-laravel
 Repository made for Course on https://code.education/cursos-online/
 
-DevOps module, Docker unit, Exercise 1 of http://lancamento.fullcycle.com.br/
+DevOps module, CONTINUOUS INTEGRATION unit, Exercise 3 of http://lancamento.fullcycle.com.br/
 
 ## Image Link for the exercise
 https://hub.docker.com/repository/docker/yurikoster1/devops1_laravel
