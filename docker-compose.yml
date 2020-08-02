@@ -4,8 +4,9 @@ services:
   #PHP
   devops_1_app:
     build:
-      context: .docker/laravel
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: .docker/laravel/Dockerfile
+      target: develop
     image: yurikoster1/laravel_base
     depends_on:
       - "devops_1_app-database"
